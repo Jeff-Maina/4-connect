@@ -5,6 +5,17 @@ import { useEffect } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  // Define players
+  const players = ["Player 1", "Player 2"];
+  let currentPlayerIndex = 0;
+  let currentPlayer = players[currentPlayerIndex];
+
+  // Function to switch the current player
+  function switchPlayer() {
+    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+    currentPlayer = players[currentPlayerIndex];
+  }
+
   const gameBoard = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -27,13 +38,18 @@ export default function Home() {
 
     for (let row = numRows; row >= 0; row--) {
       if (gameBoard[row][columnIndex] === 0) {
-        gameBoard[row][columnIndex] = 1;
+        if (currentPlayerIndex === 0) {
+          gameBoard[row][columnIndex] = 1;
+        }else{
+          gameBoard[row][columnIndex] = 2;
+        }
         lastCell = { row: row, column: columnIndex };
         break;
       }
     }
 
     updateGameBoard(lastCell);
+    console.log(gameBoard);
   }
 
   // Example usage
@@ -51,10 +67,18 @@ export default function Home() {
     if (lastCell && lastCell.row >= 0) {
       const lastIndex = grid[lastCell.row][lastCell.column];
       let lastCellPlayed = cells[lastIndex - 1];
-      lastCellPlayed.style.backgroundColor = "blue";
+      if (currentPlayerIndex === 0) {
+        lastCellPlayed.style.backgroundColor = "blue";
+        switchPlayer();
+      } else {
+        lastCellPlayed.style.backgroundColor = "orange";
+        switchPlayer();
+      }
     } else {
+      alert("Please select a different column.");
       console.log("Column full");
     }
+    console.log(currentPlayer);
   };
 
   function getColumnIndex(grid, value) {
@@ -71,8 +95,6 @@ export default function Home() {
 
     return -1;
   }
-
-  const value = 17;
 
   // Add click event listeners to cells
   useEffect(() => {
