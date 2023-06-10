@@ -1,118 +1,419 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import { useEffect } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const gameBoard = [
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+  ];
+
+  let numRows = gameBoard.length - 1;
+
+  function handleCellClick(event) {
+    const cells = document.querySelectorAll(".pod");
+    event.stopPropagation();
+    let column = parseInt(event.target.id);
+
+    const columnIndex = getColumnIndex(grid, column);
+
+    let lastCell;
+
+    for (let row = numRows; row >= 0; row--) {
+      if (gameBoard[row][columnIndex] === 0) {
+        gameBoard[row][columnIndex] = 1;
+        lastCell = { row: row, column: columnIndex };
+        break;
+      }
+    }
+
+    updateGameBoard(lastCell);
+  }
+
+  // Example usage
+  const grid = [
+    [1, 2, 3, 4, 5, 6, 7],
+    [8, 9, 10, 11, 12, 13, 14],
+    [15, 16, 17, 18, 19, 20, 21],
+    [22, 23, 24, 25, 26, 27, 28],
+    [29, 30, 31, 32, 33, 34, 35],
+    [36, 37, 38, 39, 40, 41, 42],
+  ];
+
+  const updateGameBoard = (lastCell) => {
+    const cells = document.querySelectorAll(".pod");
+    if (lastCell && lastCell.row >= 0) {
+      const lastIndex = grid[lastCell.row][lastCell.column];
+      let lastCellPlayed = cells[lastIndex - 1];
+      lastCellPlayed.style.backgroundColor = "blue";
+    } else {
+      console.log("Column full");
+    }
+  };
+
+  function getColumnIndex(grid, value) {
+    const numRows = grid.length;
+    const numCols = grid[0].length;
+
+    for (let col = 0; col < numCols; col++) {
+      for (let row = 0; row < numRows; row++) {
+        if (grid[row][col] === value) {
+          return col;
+        }
+      }
+    }
+
+    return -1;
+  }
+
+  const value = 17;
+
+  // Add click event listeners to cells
+  useEffect(() => {
+    const cells = document.querySelectorAll(".pod");
+    cells.forEach((cell) => {
+      cell.addEventListener("click", handleCellClick);
+    });
+  }, []);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="w-full h-screen lg:grid grid-cols-12">
+      <div className="col-span-3 w-full lg:h-full flex flex-col items-center justify-center">
+        <div className="w-60 h-60 rounded-3xl border-4 border-black relative">
+          <div className="absolute w-16 h-16 rounded-full bg-white border-4 border-black left-2/4 -translate-x-2/4 -translate-y-2/4"></div>
+          <h1 className="text-center mt-12 font-bebas text-4xl">Player 1</h1>
+          <h1 className="font-bebas text-[7rem] text-center">0</h1>
+        </div>
+        <div className="w-60 h-16 border-4 flex rounded-lg items-center justify-evenly border-black mt-6">
+          <div className="w-10 h-10 border-4 border-black rounded-full"></div>
+          <div className="w-10 h-10 border-4 border-black rounded-full"></div>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className="w-full h-full col-span-6 flex flex-col items-center justify-end">
+        <div className="border-4 w-auto h-auto border-black grid grid-cols-7 grid-rows-6 pt-4 pb-8 rounded-3xl">
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="1"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="2"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="3"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="4"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="5"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="6"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="7"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="8"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="9"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="10"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="11"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="12"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="13"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="14"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="15"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="16"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="17"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="18"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="19"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="20"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="21"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="22"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="23"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="24"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="25"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="26"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="27"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="28"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="29"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="30"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="31"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="32"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="33"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="34"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="35"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="36"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="37"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="38"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="39"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="40"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="41"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+          <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
+            <div
+              id="42"
+              data-state="inactive"
+              className="md:w-16 md:h-16 h-12 w-12 border-4 pod rounded-full border-black"
+            ></div>
+          </div>
+        </div>
+        <div className="w-1/4 h-40 my-7 border-4 border-black overflow-hidden rounded-2xl">
+          <h1 className="font-bebas text-center text-3xl mt-3">
+            PLAYER 1'S TURN
+          </h1>
+          <div className="w-full h-auto grid place-items-center justify-center">
+            <h1 className="font-bebas text-[5rem] p-0 m-0">
+              30<span className="text-zinc-500 text-5xl">S</span>
+            </h1>
+          </div>
+        </div>
       </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className="col-span-3 w-full lg:h-full flex flex-col items-center justify-center">
+        <div className="w-60 h-60 rounded-3xl border-4 border-black relative">
+          <div className="absolute w-16 h-16 rounded-full bg-white border-4 border-black left-2/4 -translate-x-2/4 -translate-y-2/4"></div>
+          <h1 className="text-center mt-12 font-bebas text-4xl">Player 1</h1>
+          <h1 className="font-bebas text-[7rem] text-center">0</h1>
+        </div>
+        <div className="w-60 h-16 border-4 flex rounded-lg items-center justify-evenly border-black mt-6">
+          <div className="w-10 h-10 border-4 border-black rounded-full"></div>
+          <div className="w-10 h-10 border-4 border-black rounded-full"></div>
+        </div>
       </div>
     </main>
-  )
+  );
 }
