@@ -11,14 +11,13 @@ body {
   padding: 0;
   box-sizing: border-box;
   overflow-x: hidden;
-  background: #E0EAFC;  /* fallback for old browsers */
-  background: linear-gradient(220.55deg, #FFED46 0%, #FF7EC7 100%);
+  background: blueviolet;  /* fallback for old browsers */
 }
 
 .pod {
   cursor: pointer !important;
-  background-color: #fef28765 ;
-  box-shadow: inset 0px 12px 0px 0px rgba(0, 0, 2, 1);
+  background-color: blueviolet;
+  /* box-shadow: inset 0px 7px 0px 0px rgba(0, 0, 2, 1); */
 }
 
 .grid-box{
@@ -27,20 +26,21 @@ body {
 
 .playerTwoTile {
   cursor: pointer;
-  box-shadow: inset 7px -11px 8px 15px rgb(245, 124, 3);
+  /* box-shadow: inset 7px -11px 8px 15px rgb(245, 124, 3); */
   /* background: radial-gradient(circle at 20px 20px, #60a7f3, rgb(1, 33, 91)); */
-  background-color: rgb(251, 172, 25) !important;
+  background-color: rgb(249, 124, 0) !important;
 }
 
 .playerOneTile {
   cursor: pointer;
-  box-shadow: inset 7px -11px 8px 15px rgb(1, 74, 212);
+  /* box-shadow: inset 7px -11px 8px 15px rgb(1, 74, 212); */
   /* background: radial-gradient(circle at 20px 20px, #60a7f3, rgb(1, 33, 91)); */
-  background-color: rgb(95, 150, 251) !important;
+  background-color: rgb(0, 88, 251) !important;
 }
 
 .tile {
-  box-shadow:-6px 7px 0px 0px rgba(0, 0, 2, 1);
+  background: #fff;
+  box-shadow:0px 11px 0px 0px rgba(0, 0, 2, 1);
 }
 
 .mask{
@@ -65,4 +65,13 @@ body {
 .mask-disabled{
   visibility: 0;
   z-index: -100;
+}
+
+.grid-tile{
+  border-radius: 60px;
+}
+
+
+.modal{
+  border-radius: 30px !important;
 }

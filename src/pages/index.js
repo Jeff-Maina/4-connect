@@ -208,7 +208,7 @@ export default function Home() {
     cells.forEach((cell) => {
       cell.textContent = ""; // Clear the cell content
       cell.classList.remove("playerOneTile", "playerTwoTile");
-      cell.style.backgroundColor = "#fef28765";
+      cell.style.backgroundColor = "blueViolet";
     });
   }
 
@@ -287,26 +287,21 @@ export default function Home() {
   return (
     <>
       <main className="w-full h-screen lg:grid grid-cols-12">
-        <div className="col-span-3 w-full lg:h-full flex flex-col items-center justify-center">
-          <div className="w-60 tile h-60 rounded-3xl border-4 border-black relative bg-white">
+        <div className="col-span-3 w-full lg:h-full relative z-20 flex flex-col items-center justify-center">
+          <div className="w-44 tile h-48 rounded-3xl border-4 border-black relative bg-white">
             <div
-              className={`absolute w-16 h-16 rounded-full bg-white border-4 border-black left-2/4 -translate-x-2/4 -translate-y-2/4`}
+              className={`absolute w-16 h-16 rounded-full bg-white border-4 border-black left-2/4 -translate-x-2/4 -translate-y-2/4 playerOneTile`}
             ></div>
             <h1 className={`text-center mt-12 font-bebas text-4xl`}>
               Player 1
             </h1>
-            <h1 className="font-bebas text-[7rem] text-center">
+            <h1 className="font-bebas text-[4rem] font-black text-center">
               {playerOneScore}
             </h1>
           </div>
-          <div className="w-60 h-16 border-4 flex rounded-lg items-center justify-evenly border-black mt-6 tile bg-white">
-            <div
-              className={`w-10 h-10 border-4 border-black rounded-full ${activePlayerColor}`}
-            ></div>
-          </div>
         </div>
-        <div className="w-full h-full col-span-6 flex flex-col items-center justify-end">
-          <div className="border-4 w-auto h-auto border-black grid grid-cols-7 tile grid-rows-6 pt-4 pb-8 rounded-3xl grid-box">
+        <div className="w-full h-full col-span-6 flex flex-col items-center justify-end relative z-20">
+          <div className="border-4 w-auto h-auto border-black grid grid-cols-7 tile grid-rows-6 pt-4 pb-8 grid-tile  grid-box">
             <div className="w-full h-full md:p-4 p-2 flex items-center justify-center">
               <div
                 id="1"
@@ -614,19 +609,23 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="col-span-3 w-full lg:h-full flex flex-col items-center justify-center">
-          <div className="w-60 h-60 rounded-3xl border-4 border-black relative tile bg-white">
-            <div className="absolute w-16 h-16 rounded-full bg-white border-4 border-black left-2/4 -translate-x-2/4 -translate-y-2/4"></div>
+        <div className="col-span-3 w-full lg:h-full flex flex-col items-center justify-center relative z-20">
+          <div className="w-44 tile h-48 rounded-3xl border-4 border-black relative bg-white">
+            <div className="absolute w-16 h-16 rounded-full bg-white border-4 border-black left-2/4 -translate-x-2/4 -translate-y-2/4 playerTwoTile"></div>
             <h1 className="text-center mt-12 font-bebas text-4xl">Player 2</h1>
-            <h1 className="font-bebas text-[7rem] text-center">
+            <h1 className="font-bebas text-[4rem] font-black text-center">
               {playerTwoScore}
             </h1>
           </div>
-          <div className="w-60 h-16 border-4 flex rounded-lg items-center justify-evenly border-black mt-6 tile bg-white">
-            <div
-              className={`w-10 h-10 border-4 border-black rounded-full ${inactivePlayerColor}`}
-            ></div>
-          </div>
+        </div>
+        <div className="fixed bottom-0 left-0 w-screen z-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path
+              fill="#5000ca"
+              fill-opacity="1"
+              d="M0,224L48,224C96,224,192,224,288,192C384,160,480,96,576,106.7C672,117,768,203,864,224C960,245,1056,203,1152,165.3C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            ></path>
+          </svg>
         </div>
       </main>
       <div
@@ -640,7 +639,7 @@ export default function Home() {
             e.stopPropagation();
             setMaskActive(true);
           }}
-          className={`tile w-1/4 h-64 border-4 border-black bg-white rounded-xl flex flex-col items-center justify-center`}
+          className={`tile w-1/4 h-64 border-4 border-black bg-white  flex flex-col items-center justify-center modal`}
         >
           <h1 className="font-bebas text-5xl">WINNER!</h1>
           <h2 className="font-bebas text-5xl my-5 upper">{winner}</h2>
